@@ -20,3 +20,4 @@ def get_keywords(word, name):
     f = codecs.open(name, 'w', "utf-8")
     f.write(unicode(str(result), 'utf-8'))
     f.close()
+    

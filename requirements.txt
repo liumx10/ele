@@ -4,3 +4,6 @@ Jinja2==2.7
 Flask-DebugToolbar==0.8.0
 Flask-SQLAlchemy==2.0
 SQLAlchemy==0.9.8
+flask-script==2.05
+BeautifulSoup=3.2.1
+chardet=2.3.0

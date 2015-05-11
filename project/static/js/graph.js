@@ -40,6 +40,8 @@ function render(data){
 
   cy.nodes().on("click", function(){    
       if (this.data("center")){
+          var url = "http://baike.baidu.com/search/word?word=" + this.id() + "&pic=1&sug=1&enc=utf-8"
+          window.open(url)
       }else{
           cy.center(this)
           newword = this.id()
