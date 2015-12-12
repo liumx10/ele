@@ -26,6 +26,20 @@ def get_order(restaurant_id):
 	r = requests.get(baseurl+"&from=0&size="+str(size))
 	return json.loads(r.text)
 
+def get_order_by_foods_and_restaurant(restaurant_id,food_set):
+	orders = get_order(restaurant_id)
+	res=[]
+	for order in orders["hits"]["hits"]:
+		groups = order["_source"]["detail"]["group"]
+		foods = set()
+		for group in groups:
+			for food in group:
+				foods.add(food["id"])
+		if food_set.issubset(foods):
+			res.append(order)
+	return res
+
+
 def main():
 	shop = []
 	menu = []
