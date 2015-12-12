@@ -24,7 +24,7 @@
                     {% endfor %}
                   </div>
                   <div class='col-md-6'> 
-                    <span> 支持度: {{ rule.sup | round(2) }},  信任度: {{ rule.conf | round(2) }} </span>
+                    <span> 支持度: {{ rule.sup | int }},  信任度: {{ (rule.conf*100) |round(2) }}% </span>
                   </div>
                 </div>
             </div>

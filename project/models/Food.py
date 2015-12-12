@@ -1,3 +1,4 @@
+#coding:utf-8
 from project import db
 
 class Food(db.Model):
@@ -22,4 +23,16 @@ def get_food(restaurant_id):
         count = count+food.count
     for food in res:
         food.y = food.count*1.0/count
-    return res
+    all_count = 0.0
+    foods = []
+    for food in res:
+        if food.y < 0.005:
+            break
+        all_count = all_count + food.y
+        foods.append(food)
+    foods.append({'name': u"其他", 'y': 1.0-all_count, 'fid': -1, 'rid':-1})
+    print foods
+    return foods
+
+def get_all_food(restaurant_id):
+    return Food.query.filter_by(fid=restaurant_id).all()

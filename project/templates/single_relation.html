@@ -1,0 +1,49 @@
+{%extends "base.html" %}
+{% block js %}
+<script src="/static/js/lib/highcharts.js"></script>
+{% endblock %}
+{%block container %}
+    {% if single_food == None%}
+      没有相关系数
+    {% else %}
+        
+        <div id="container" style="height: 400px"></div>
+    <script>
+      $(function () {
+        $('#container').highcharts({
+            title: { text: '{{single_food.prefix_foods[0].name}}'},
+            subtitle: {text: "与其他食品的相关性"},
+            chart: {
+                type: 'column'
+            },
+            xAxis: {
+                categories: [
+                  {% for rule in single_food.rules%}
+                    {% for food in rule.foods %}
+                    "{{ food.name }}",
+                    {% endfor %}
+                  {% endfor %}
+                ]
+            },
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    events: {
+                        click: function () {
+                          //  alert('You just clicked the graph');
+                        }
+                    }
+                }
+            },
+            series: [{
+                data: [
+                  {% for rule in single_food.rules %}
+                    {{rule.conf}},
+                  {% endfor %}
+                ]
+            }]
+        });
+      });
+    {% endif %}
+</script>
+{% endblock %}
