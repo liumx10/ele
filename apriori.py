@@ -58,7 +58,7 @@ class Apriori:
         for item in items:
             count = self.freqList[item]
             support = self.support(count)
-            if support >= .95:
+            if support >= .95 * self.numItems:
                 self.highSupportList.append(item)
             elif support >= self.minSup:
                 f.append(item)
@@ -116,13 +116,13 @@ class Apriori:
         return float(itemCount)/subCount
 
     def support(self, count):
-        return float(count)/self.numItems
+        return count
 
     def firstPass(self, items, k):
         f = []
         for item, count in items.iteritems():
             support = self.support(count)
-            if support == 1:
+            if support == self.numItems:
                 self.highSupportList.append(item)
             elif support >= self.minSup:
                 f.append(item)
@@ -194,7 +194,7 @@ class Apriori:
             f.write(json.dumps(res))
 
 
-def mineAssosiationRule(restaurant_id,minSup=0.005,minConf=0.01):
+def mineAssosiationRule(restaurant_id,minSup=20,minConf=0.01):
     a = Apriori(restaurant_id, minSup, minConf)
     a.saveResultToJson("data/"+str(restaurant_id)+".json")
 
