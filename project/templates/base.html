@@ -1,0 +1,56 @@
+<html>
+<head>
+  <title>homepage</title>
+</head>
+<script src="/static/js/lib/jquery-2.0.3.min.js"></script>
+<script src="/static/js/lib/jquery.leanModal.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+{% block js%}
+{% endblock %}
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/css/leanModal.css">
+<link rel="stylesheet" type="text/css" href="/static/css/simple-sidebar.css">
+<style>
+    body { 
+      font: 14px helvetica neue, helvetica, arial, sans-serif;
+    }
+
+</style>
+
+<div class="modal-dialog" id="chart">
+  <div id="chart_container"></div>
+</div>
+<body>
+  <nav class="navbar navbar-fixed-top navbar-inverse" style='background-color: black'>
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          Eleme
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="navbar-right">
+          <ul id="navi-menu" class="nav navbar-nav">
+          <li id='navi-index'> 
+            <a href='/'> 首页 </a>
+          </li>
+          <li id='navi-homepage'>
+            <a href="/homepage"> 相关菜品 </a>
+          </li>
+          <li id='navi-teacher'>
+            <a href="/count"> 销量统计 </a>
+          </li>
+          <li id='navi-article'>
+            <a href="/article"> 设置套餐 </a>
+          </li>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="container" style="margin-top:60px"> 
+    {% block container %}
+    {% endblock %}
+  </div>
+</body>
+
+</html>

@@ -29,3 +29,36 @@ def homepage():
 	foods = apriori.getRules(int(rid))
 	return render_template('homepage.html', foods=foods)
 
+@app.route('/count', methods=['get'])
+def count():
+	if 'restaurant_id' not in request.cookies:
+		return redirect('/')
+	rid = request.cookies.get('restaurant_id')
+
+	data =  [{  "name": '包子',
+                "y": 56.33,
+                "drilldown": '包子'
+            }, {
+                "name": '水饺',
+                "y": 24.03,
+                "drilldown":  '水饺'
+            }, {
+                "name": '面条',
+                "y": 10.38,
+                "drilldown":  '面条',
+            }, {
+                "name": '哈哈',
+                "y": 4.77,
+                "drilldown": '哈哈'
+            }, {
+                "name": '馒头',
+                "y": 0.91,
+                "drilldown": '馒头'
+            }, {
+                "name": '其他',
+                "y": 0.2,
+                "drilldown": '其他'
+            }]
+
+	return render_template('count.html', data=data)
+
