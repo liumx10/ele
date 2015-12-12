@@ -1,10 +1,11 @@
 {%extends "base.html" %}
+
 {% block js %}
 <script src="/static/js/lib/highcharts.js"></script>
 {% endblock %}
 {%block container %}
     <h3> 添加套餐 </h3>
-    <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" 
+    <a tabindex="0" class="btn btn-danger" role="button" data-toggle="popover" 
     data-trigger="focus" title="菜单" 
     data-content="<ul>{% for food in allfood %}<a><li class='food-item' id='{{food.rid}}'>{{food.name}}</li></a>{% endfor %}</li></ul>"
     id='example'>
@@ -14,7 +15,10 @@
     <ul class="list-group" id='list-group' style='margin: 20px 0'>
     </ul>
 
-    
+    <a class='btn btn-default'>
+        确认
+    </a>
+
     <script>
     $(function(){
         allfood = {
@@ -22,6 +26,11 @@
                 "{{food.rid}}":"{{food.name}}",
             {%endfor%}
         }
+        preset = {{ preset | safe }}
+        $.each(preset, function(i, item){
+            console.log(allfood[item.toString()])
+            $("#list-group").append("<li class='list-group-item'>"+allfood[item.toString()]+"</li>")
+        })
         $('#example').popover({
             'html':true
         })
@@ -34,4 +43,7 @@
         })
     })
     </script>
+{% endblock %}
+{% block title %}
+setmeal
 {% endblock %}

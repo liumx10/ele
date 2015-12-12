@@ -37,21 +37,9 @@ class Apriori:
                         self.freqList[c] += 1
 
             self.F[k] = self.prune(candidate[k], k)
-            if k > 2:
-                self.removeSkyline(k, k-1)
             k += 1
 
         return self.F
-
-    def removeSkyline(self, k, kPrev):
-        for item in self.F[k]:
-            subsets = self.genSubsets(item)
-            for subset in subsets:
-                if subset in (self.F[kPrev]):
-                    self.F[kPrev].remove(subset)
-
-
-        subsets = self.genSubsets
 
     def prune(self, items, k):
         f = []
@@ -142,17 +130,17 @@ class Apriori:
         data = getdata.get_order(restaurant_id)
         orders = data["hits"]["hits"]
         for order in orders:
-            foods = order["_source"]["detail"]["group"][0]
-            self.numItems += 1
-            key = order["_source"]["order_id"]
-            for i, item in enumerate(foods):
-                food_id = item["id"]
-                quantity = item["quantity"]
-#                print key,food_id,quantity
-                self.name[food_id] = item["name"]
-                self.transList[key].append(food_id)
-                self.itemset.add(food_id)
-                self.freqList[food_id] += quantity
+            for foods in order["_source"]["detail"]["group"]:
+                self.numItems += 1
+                key = order["_source"]["order_id"]
+                for i, item in enumerate(foods):
+                    food_id = item["id"]
+                    quantity = item["quantity"]
+    #                print key,food_id,quantity
+                    self.name[food_id] = item["name"]
+                    self.transList[key].append(food_id)
+                    self.itemset.add(food_id)
+                    self.freqList[food_id] += quantity
 
     def readable(self,item):
         itemStr = ''
@@ -207,8 +195,9 @@ def getRules(restaurant_id):
 
 
 def main():
-    mineAssosiationRule(456941)
-    print(getRules(456941))
+    print(getdata.get_order_by_foods_and_restaurant(279592,s))
+    mineAssosiationRule(279592)
+    print(getRules(279592))
 
 if __name__ == '__main__':
     main()

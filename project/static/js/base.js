@@ -32,7 +32,6 @@ function postJson(url, param, success){
                 contentType:"application/json",
                 success: success,
                 error: function(){
-                    alert("error")
                 }
     })
 }

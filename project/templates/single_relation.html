@@ -30,7 +30,7 @@
                     cursor: 'pointer',
                     events: {
                         click: function () {
-                          //  alert('You just clicked the graph');
+
                         }
                     }
                 }
@@ -38,9 +38,18 @@
             series: [{
                 data: [
                   {% for rule in single_food.rules %}
-                    {{rule.conf}},
+                  {
+                    'y': {{rule.conf}},
+                    'events':{
+                      click:function(){
+                        preset = "{%for food in rule.foods %}{{food.id}},{% endfor %}{{single_food.prefix_foods[0].id}}"
+                        window.location.href="/setmeal?preset="+preset
+                      }
+                    }
+                  },
                   {% endfor %}
-                ]
+                ],
+                'name': '{{single_food.prefix_foods[0].name}}'
             }]
         });
       });

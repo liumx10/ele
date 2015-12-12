@@ -1,10 +1,12 @@
 <html>
 <head>
-  <title>homepage</title>
+  <title>
+  {% block title %}{% endblock%}</title>
 </head>
 <script src="/static/js/lib/jquery-2.0.3.min.js"></script>
 <script src="/static/js/lib/jquery.leanModal.min.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/base.js"></script>
 {% block js%}
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
@@ -21,27 +23,27 @@
   <div id="chart_container"></div>
 </div>
 <body>
-  <nav class="navbar navbar-fixed-top navbar-inverse" style='background-color: black'>
+  <nav class="navbar navbar-fixed-top navbar-inverse" style='background-color: #1e89e0; color:white'>
     <div class="container">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="#" style="color:white">
           Eleme
         </a>
       </div>
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <div class="navbar-right">
-          <ul id="navi-menu" class="nav navbar-nav">
+          <ul id="navi-menu" class="nav navbar-nav" style="color:white">
           <li id='navi-index'> 
-            <a href='/'> 首页 </a>
+            <a href='/'style="color:white"> 首页 </a>
           </li>
           <li id='navi-homepage'>
-            <a href="/homepage"> 相关菜品 </a>
+            <a href="/homepage" style="color:white"> 相关菜品 </a>
           </li>
           <li id='navi-teacher'>
-            <a href="/count"> 销量统计 </a>
+            <a href="/count" style="color:white"> 销量统计 </a>
           </li>
           <li id='navi-article'>
-            <a href="/setmeal"> 设置套餐 </a>
+            <a href="/setmeal" style="color:white"> 设置套餐 </a>
           </li>
         </div>
       </div>

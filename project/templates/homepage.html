@@ -3,6 +3,12 @@
 <script src="/static/js/homepage.js"></script>
 {% endblock %}
 {%block container %}
+<div id='order-list' class='modal-dialog' style='background-color:white; padding: 10px; height: 500px; overflow: auto; width:800px;'>
+  <h4> order </h4>
+  <ul class="list-group" id='list-group' style='margin: 20px 0'>
+  </ul>
+</div>
+
     {% set id = 1 %}
     {% for food in foods %}
       <div class='panel panel-success'>
@@ -23,8 +29,8 @@
                       <span> {{food.name}} </span>
                     {% endfor %}
                   </div>
-                  <div class='col-md-6'> 
-                    <span> 支持度: {{ rule.sup | int }},  信任度: {{ (rule.conf*100) |round(2) }}% </span>
+                  <div class='col-md-6 rule-info'> 
+                    <a rel='leanModal' href="#order-list"ipset='{%for f in rule.foods%}{{f.id}},{%endfor%}{{food.prefix_foods[0].id}}'> 支持度: {{ rule.sup | int }},  信任度: {{ (rule.conf*100) |round(2) }}% </a>
                   </div>
                 </div>
             </div>
@@ -34,4 +40,37 @@
       </div>
     {% set id=id+1 %}
     {% endfor %}
+    <script>
+    $(function(){
+      $(".rule-info a").click(function(){
+        postJson('/get_orders', {'ipset': $(this).attr('ipset')}, function(data){
+          console.log(data)
+          $("#list-group").empty()
+          $("#list-group").append('<li class="list-group-item"><div class="row">  \
+              <div class="col-md-3"> 订单号 </div> \
+              <div class="col-md-3"> 创建日期 </div> \
+              <div class="col-md-4"> 内容 </div> \
+              <div class="col-md-2"> 评分 </div> \
+           </div></li>')
+          $.each(data, function(i, item){
+            group = ""
+            $.each(item._source.detail.group[0], function(i, item){
+                group = group + item.name + " "
+            })
+            str = '<div class="row"><div class="col-md-3">'+item._id + "</div>" +
+                                    '<div class="col-md-3">'+item._source.created_at + "</div>" +
+                                    '<div class="col-md-4">'+group + "</div>" +
+                                    '<div class="col-md-2">'+item._score + "</div>"
+            $("#list-group").append("<li class='list-group-item'>" + str + "</li>")
+            
+          })
+        })
+      })
+      $('a[rel*=leanModal]').leanModal()
+    })
+    </script>
+{% endblock %}
+
+{% block title%}
+homepage
 {% endblock %}
