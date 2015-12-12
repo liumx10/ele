@@ -8,8 +8,9 @@ def get_shop():
 
 	r = requests.get('http://115.159.159.158:9200/hackathon/restaurant/_search?from=0&size='+str(size))
 	return json.loads(r.text)
-def get_menu():
-	r = requests.get('http://115.159.159.158:9200/hackathon/menu/_search')
+
+def get_menu(restaurant_id):
+	r = requests.get('http://115.159.159.158:9200/hackathon/menu/_search?size=100000&q=_id:'+str(restaurant_id))
 	res = json.loads(r.text)
 	size = res['hits']['total']
 
