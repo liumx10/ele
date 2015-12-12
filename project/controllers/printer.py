@@ -7,6 +7,7 @@ from flask import render_template, request, redirect
 import json
 
 import os
+import apriori
 
 @app.route('/', methods=['POST', 'GET'])
 def start():
@@ -25,19 +26,6 @@ def homepage():
 		return redirect('/')
 	rid = request.cookies.get('restaurant_id')
 	print rid
-	
-	foods = [
-	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
-	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }]
-	},
-	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
-	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }]
-	},
-	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
-	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }, 
-	 		{"foods": [ {"id": 1, "name": u'水饺' },{"id": 1, "name": u'水饺' },{"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }
-	 ]
-	}
-	]
+	foods = apriori.getRules(int(rid))
 	return render_template('homepage.html', foods=foods)
 
