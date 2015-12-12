@@ -1,69 +1,43 @@
 # -*- coding: utf-8 -*-
 from project import app
+from functools  import wraps
 from project.models import Relation
 
-from flask import render_template, request
+from flask import render_template, request, redirect
 import json
 
 import os
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def start():
-    return render_template('index.html')
+	if request.method == "POST":
+		restaurant_id = request.form['restaurant_id']
+		resp = app.make_response(redirect('/homepage'))
+		resp.set_cookie("restaurant_id", value=str(restaurant_id))
+		return resp
+	return render_template('index.html')
 
 from project.models.Relation import get_relations
 
-@app.route("/get_vec", methods=["post"])
-def get_vec():
-    para = request.get_json()
-    word = para["word"]
-
-    result = get_relations(word)
-    return json.dumps(result)
-
-from project.models.Word import get_top_heat
-from project.models.Heat import get_top_hot_of_month
-@app.route("/get_top_word", methods=["post"])
-def get_top_word():
-	para = request.get_json()
-	month = 0
-	if para.has_key("month"):
-		month = para["month"]
-
-	number = 5
-	if para.has_key("number"):
-		number = para["number"]
-
-	result = get_top_hot_of_month(number, month)
-	return json.dumps(result)
-
-@app.route("/test", methods=["get"])
-def test():
-	return "hello world"
-
-@app.route("/baike", methods=["get", "post"])
-def baike():
-	word = request.get_json()["word"]
-	filename = app.config["BAIKE_DIR"] + '/' + word;
-
-	if os.path.exists(filename) == False:
-		print "no such file, will get from baidu baike"
-
-		from crawler.baike import get_keywords
-		get_keywords(word, filename)
-
-	result = open(filename).read()
-	return result
-
-@app.route("/get_heats", methods = ["post"])
-def get_heats():
-	word = request.get_json()["word"]
+@app.route("/homepage", methods=['get'])
+def homepage():
+	if "restaurant_id" not in request.cookies:
+		return redirect('/')
+	rid = request.cookies.get('restaurant_id')
+	print rid
 	
-	from project.models.Heat import get_heats
-	result = get_heats(word)
+	foods = [
+	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
+	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }]
+	},
+	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
+	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }]
+	},
+	{'prefix_foods': [ {"id": 1, "name": u'水饺' }],
+	 'rules': [{"foods": [ {"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }, 
+	 		{"foods": [ {"id": 1, "name": u'水饺' },{"id": 1, "name": u'水饺' },{"id": 1, "name": u'水饺' }], 'conf': 0.1 , "sup": 0.1 }
+	 ]
+	}
+	]
+	return render_template('homepage.html', foods=foods)
 
-	return json.dumps(result)
-
-@app.route("/past_hotword", methods = ["get", "post"])
-def past_hotword():
-	return render_template("past_hotword.html")
