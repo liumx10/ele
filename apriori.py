@@ -157,10 +157,8 @@ class Apriori:
     def readable(self,item):
         itemStr = ''
         for k, i in enumerate(item):
-           itemStr += self.name[i]  +" (" + str(i) + ")"
-           if len(item) != 0 and k != len(item)-1:
-               itemStr += ",\t"
-        return itemStr.replace("'", "")
+           itemStr += self.name[i] +","
+        return itemStr
 
     def saveResultToJson(self,filename):
         res=[]
@@ -168,17 +166,16 @@ class Apriori:
         rules = self.genRules(frequentItemsets)
         rule_by_item = dict()
         for i,rule in enumerate(rules):
-
-            if rule[0] in rules:
-                rule_by_item[rule[0]].append(rule)
+            if self.readable(rule[0]) in rule_by_item:
+                rule_by_item[self.readable(rule[0])].append(rule)
             else:
-                rule_by_item[rule[0]] = [rule]
+                rule_by_item[self.readable(rule[0])] = [rule]
 
         for k in rule_by_item:
             rules_aggregated = rule_by_item[k]
             single_rule = dict()
             single_rule_prefix_food = []
-            for food in k:
+            for food in rules_aggregated[0][0]:
                 single_rule_prefix_food.append({"id":food,"name":self.name[food]})
             single_rule["prefix_foods"] = single_rule_prefix_food
             single_rule["rules"] = []
@@ -197,18 +194,21 @@ class Apriori:
             f.write(json.dumps(res))
 
 
-def mineAssosiationRule(restaurant_id,minSup=0.01,minConf=0.1):
-    a = Apriori(279592, minSup, minConf)
+def mineAssosiationRule(restaurant_id,minSup=0.005,minConf=0.01):
+    a = Apriori(restaurant_id, minSup, minConf)
     a.saveResultToJson("data/"+str(restaurant_id)+".json")
 
 def getRules(restaurant_id):
-    with open("data/"+str(restaurant_id)+".json") as f:
+    path = "data/"+str(restaurant_id)+".json"
+    if not os.path.isfile(path) :
+        mineAssosiationRule(restaurant_id)
+    with open(path) as f:
         return json.loads(f.read())
 
 
 def main():
-    mineAssosiationRule(279592)
-    print(getRules(279592))
+    mineAssosiationRule(456941)
+    print(getRules(456941))
 
 if __name__ == '__main__':
     main()
