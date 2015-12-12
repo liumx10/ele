@@ -1,3 +1,2 @@
 $(function(){
-   $('.collapse').collapse('hide')
 })

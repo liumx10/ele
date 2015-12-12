@@ -33,7 +33,11 @@
         series: [{
             name: 'Brands',
             colorByPoint: true,
-            data: {{ data | safe }} 
+            data: [
+              {% for food in data %}
+              {'name': "{{ food.name }}", 'y': {{food.y*100}}, 'drilldown': "{{food.name}}" }, 
+              {% endfor %}
+            ] 
         }],
         drilldown: {
             series: [{

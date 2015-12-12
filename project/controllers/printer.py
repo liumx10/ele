@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from project import app
 from functools  import wraps
-from project.models import Relation
+from project.models import Food as fo
+from project.models.Food import get_food
 
 from flask import render_template, request, redirect
 import json
@@ -34,31 +35,9 @@ def count():
 	if 'restaurant_id' not in request.cookies:
 		return redirect('/')
 	rid = request.cookies.get('restaurant_id')
+	foods = get_food(rid)
 
-	data =  [{  "name": '包子',
-                "y": 56.33,
-                "drilldown": '包子'
-            }, {
-                "name": '水饺',
-                "y": 24.03,
-                "drilldown":  '水饺'
-            }, {
-                "name": '面条',
-                "y": 10.38,
-                "drilldown":  '面条',
-            }, {
-                "name": '哈哈',
-                "y": 4.77,
-                "drilldown": '哈哈'
-            }, {
-                "name": '馒头',
-                "y": 0.91,
-                "drilldown": '馒头'
-            }, {
-                "name": '其他',
-                "y": 0.2,
-                "drilldown": '其他'
-            }]
+	data =  foods
 
 	return render_template('count.html', data=data)
 
