@@ -17,10 +17,10 @@ def get_menu():
 	return json.loads(r.text)
 
 def get_order(restaurant_id):
-	baseurl  = "http://115.159.159.158:9200/hackathon/menu/_search?q=restaurant_id:"+str(restaurant_id)
+	baseurl  = "http://115.159.159.158:9200/hackathon/order/_search?q=restaurant_id:"+str(restaurant_id)
 	r = requests.get(baseurl)
 	res = json.loads(r.text)
-	size = res['hits']['hits']
+	size = res['hits']['total']
 
 	r = requests.get(baseurl+"&from=0&size="+str(size))
 	return json.loads(r.text)
@@ -35,11 +35,11 @@ def main():
 	order = get_order(456941)
 
 	print "========= shop number =========="
-	#print len(shop['hits']['hits'])
+	print len(shop['hits']['hits'])
 	print "========= menu number =========="
-	#print len(menu['hits']['hits'])
+	print len(menu['hits']['hits'])
 	print "========= order number ========="
-	print len(order)
+	print len(order['hits']['hits'])
 
 
 if __name__ == "__main__":
