@@ -89,7 +89,8 @@ def get_orders():
 	params = request.get_json()
 	ipset = params.get('ipset').split(',')
 	sets = []
-	for i in ipset:
+	for i in ipset[0:-1]:
 		sets.append(int(i))
+	print sets
 	res = getdata.get_order_by_foods_and_restaurant(int(rid), set(sets))
 	return json.dumps(res)

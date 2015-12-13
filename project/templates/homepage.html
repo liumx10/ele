@@ -10,7 +10,7 @@
 </div>
 
     {% set id = 1 %}
-    {% for food in foods %}
+    {% for food in foods if id < 10 %}
       <div class='panel panel-success'>
         <div class='panel-heading'>
           <a role="button" data-toggle="collapse" data-parent="#accordion" href="#rule{{id}}" aria-expanded="true" aria-controls="collapseOne">
@@ -30,7 +30,10 @@
                     {% endfor %}
                   </div>
                   <div class='col-md-6 rule-info'> 
-                    <a rel='leanModal' href="#order-list"ipset='{%for f in rule.foods%}{{f.id}},{%endfor%}{{food.prefix_foods[0].id}}'> 支持度: {{ rule.sup | int }},  信任度: {{ (rule.conf*100) |round(2) }}% </a>
+                    <a rel='leanModal' href="#order-list"
+                      ipset='{%for f in rule.foods%}{{f.id}},{%endfor%}{%for f in food.prefix_foods%}{{f.id}},{%endfor%}'> 
+                      支持度: {{ rule.sup | int }},  信任度: {{ (rule.conf*100) |round(2) }}% 
+                    </a>
                   </div>
                 </div>
             </div>
