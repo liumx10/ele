@@ -7,10 +7,11 @@ from collections import defaultdict, Iterable
 import itertools
 import getdata
 import json
+from fp_growth import find_frequent_itemsets
 
 class Apriori:
     def __init__(self, restaurant_id, minSup, minConf):
-        self.transList = defaultdict(list)
+        self.transList = []
         self.freqList = defaultdict(int)
         self.itemset = set()
         self.name = defaultdict(str)
@@ -24,34 +25,23 @@ class Apriori:
         self.minConf = minConf
 
     def genAssociations(self):
-        candidate = {}
-        count = {}
 
-        self.F[1] = self.firstPass(self.freqList, 1)
-        k=2
-        while len(self.F[k-1]) != 0:
-            candidate[k] = self.candidateGen(self.F[k-1], k)
-            for t in self.transList.iteritems():
-                for c in candidate[k]:
-                    if set(c).issubset(t[1]):
-                        self.freqList[c] += 1
+        for item in find_frequent_itemsets(self.transList, self.minSup):
+            if len(item) in self.F:
+                self.F[len(item)] .append(tuple(item))
+            else:
+                self.F[len(item)] = [(tuple(item))]
 
-            self.F[k] = self.prune(candidate[k], k)
-            k += 1
+            set_item = set(item)
+            for t in self.transList:
+                if set_item.issubset(set(t)):
+                    if tuple(item) in self.freqList:
+                        self.freqList[tuple(item)] +=1
+                    else:
+                        self.freqList[tuple(item)] = 1
 
         return self.F
 
-    def prune(self, items, k):
-        f = []
-        for item in items:
-            count = self.freqList[item]
-            support = self.support(count)
-            if support >= .95 * self.numItems:
-                self.highSupportList.append(item)
-            elif support >= self.minSup:
-                f.append(item)
-
-        return f
 
     def candidateGen(self, items, k):
         candidate = []
@@ -89,6 +79,8 @@ class Apriori:
                         itemCount = self.freqList[item]
                         if subCount != 0:
                             confidence = self.confidence(subCount, itemCount)
+                            if confidence >= 1.0:
+                                print item,subset
                             if confidence >= self.minConf:
                                 support = self.support(self.freqList[item])
                                 rhs = self.difference(item, subset)
@@ -117,15 +109,6 @@ class Apriori:
 
         return f
 
-    """
-    Prepare the transaction data into a dictionary
-    key: Receipt.id
-    val: set(Goods.Id)
-
-    Also generates the frequent itemlist for itemsets of size 1
-    key: Goods.Id
-    val: frequency of Goods.Id in self.transList
-    """
     def prepData(self,restaurant_id):
         data = getdata.get_order(restaurant_id)
         orders = data["hits"]["hits"]
@@ -133,14 +116,14 @@ class Apriori:
             for foods in order["_source"]["detail"]["group"]:
                 self.numItems += 1
                 key = order["_source"]["order_id"]
+                list = []
                 for i, item in enumerate(foods):
                     food_id = item["id"]
                     quantity = item["quantity"]
     #                print key,food_id,quantity
                     self.name[food_id] = item["name"]
-                    self.transList[key].append(food_id)
-                    self.itemset.add(food_id)
-                    self.freqList[food_id] += quantity
+                    list.append(food_id)
+                self.transList.append(list)
 
     def readable(self,item):
         itemStr = ''
@@ -186,6 +169,7 @@ def mineAssosiationRule(restaurant_id,minSup=20,minConf=0.01):
     a = Apriori(restaurant_id, minSup, minConf)
     a.saveResultToJson("data/"+str(restaurant_id)+".json")
 
+
 def getRules(restaurant_id):
     path = "data/"+str(restaurant_id)+".json"
     if not os.path.isfile(path) :
@@ -195,9 +179,8 @@ def getRules(restaurant_id):
 
 
 def main():
-    print(getdata.get_order_by_foods_and_restaurant(279592,s))
-    mineAssosiationRule(279592)
-    print(getRules(279592))
+    mineAssosiationRule(250968)
+    #print(getRules(250968))
 
 if __name__ == '__main__':
     main()
