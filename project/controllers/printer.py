@@ -33,7 +33,9 @@ def homepage():
 	rid = request.cookies.get('restaurant_id')
 	print rid
 	foods = apriori.getRules(int(rid))
-	return render_template('homepage.html', foods=foods)
+	length = request.args.get('length')
+
+	return render_template('homepage.html', foods=foods, length=10)
 
 @app.route('/count', methods=['get'])
 def count():

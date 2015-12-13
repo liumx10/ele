@@ -42,7 +42,7 @@
                     'y': {{rule.conf}},
                     'events':{
                       click:function(){
-                        preset = "{%for food in rule.foods %}{{food.id}},{% endfor %},{%for pref in single_food.prefix_foods%}{{pref.id}}{%endfor%}"
+                        preset = "{%for food in rule.foods %}{{food.id}},{% endfor %}{%for pref in single_food.prefix_foods%}{{pref.id}}{%endfor%}"
                         window.location.href="/setmeal?preset="+preset
                       }
                     }

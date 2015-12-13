@@ -10,7 +10,7 @@
 </div>
 
     {% set id = 1 %}
-    {% for food in foods if id < 10 %}
+    {% for food in foods if id < length %}
       <div class='panel panel-success'>
         <div class='panel-heading'>
           <a role="button" data-toggle="collapse" data-parent="#accordion" href="#rule{{id}}" aria-expanded="true" aria-controls="collapseOne">
