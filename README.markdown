@@ -1,3 +1,11 @@
+## INTRODUCTION ##
+This is our project for hackathon [http://hackathon.ele.me/](http://hackathon.ele.me/)
+
+It can help restaurants to analyse customers habits: which food people order mostly, which two foods people tend to order together.
+
+We provide a offline analyzer and a website to show the result
+
+## NOTE ##
 Thanks to Salimane for providing the MVC framework for Flask, here is his github:
     http://github.com/salimane/flask-mvc
 
